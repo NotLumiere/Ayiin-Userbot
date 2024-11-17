@@ -5,13 +5,12 @@ from distutils.util import strtobool as sb
 from base64 import b64decode
 
 
-load_dotenv()
+load_dotenv(".env")
 
 
 
 DEVS = [
     607067484, # Ayiin
-    997461844, # Punya Ayiin
     844432220, # Risman
     883761960, # Ari
     2130526178, # Alfa
@@ -20,7 +19,7 @@ DEVS = [
 
 
 GCAST_BLACKLIST = [
-    -1001797285258,  # AyiinChats <- New
+    -1001718852988,  # AyiinChats <- New
     -1001675396283,  # AyiinChats
     -1001473548283,  # SharingUserbot
     -1001361294038,  # UltroidSupportChat
@@ -56,7 +55,7 @@ GCAST_BLACKLIST = [
 ]
 
 
-class Config(object):
+class Config:
     # Telegram App KEY and HASH
     API_KEY = int(getenv("API_KEY") or 0)
     API_HASH = str(getenv("API_HASH") or None)
@@ -77,7 +76,7 @@ class Config(object):
     # For Blacklist Group Support
     BLACKLIST_CHAT = getenv("BLACKLIST_CHAT", None)
     if not BLACKLIST_CHAT:
-        BLACKLIST_CHAT = [-1001473548283, -1001675396283]
+        BLACKLIST_CHAT = [-1001473548283, -1001675396283, -1001718852988]
 
     # Userbot Session String
     STRING_SESSION = getenv("STRING_SESSION", None)
