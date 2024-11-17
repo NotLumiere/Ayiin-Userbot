@@ -4,54 +4,21 @@
 # t.me/SharingUserbot & t.me/Lunatic0de
 # Nyenyenye bacot
 
-from telethon import events
+from sosmed import Sosmed
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest
-from telethon.tl.functions.messages import DeleteHistoryRequest
 
 from pyAyiin import cmdHelp
 from pyAyiin.decorator import ayiinCmd
 from pyAyiin.utils import eod, eor
 
-from . import cmd
+from . import cmd, var
 
 
-@ayiinCmd(pattern="sosmed(?: |$)(.*)")
-async def insta(event):
-    xxnx = event.pattern_match.group(1)
-    if xxnx:
-        link = xxnx
-    elif event.is_reply:
-        link = await event.get_reply_message()
-    else:
-        return await eod(
-            event,
-            "**Berikan Link Sosmed atau Reply Link Sosmed Untuk di Download**"
-        )
-    xx = await eor(event, "`Mengunduh...`")
-    chat = "@SaveAsbot"
-    async with event.client.conversation(chat) as conv:
-        try:
-            response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=523131145)
-            )
-            await event.client.send_message(chat, link)
-            response = await response
-        except YouBlockedUserError:
-            await event.client(UnblockRequest(chat))
-            await event.client.send_message(chat, link)
-            response = await response
-        if response.text.startswith("Forward"):
-            await xx.edit("Teruskan Pribadi.")
-        else:
-            await xx.delete()
-            await event.client.send_file(
-                event.chat_id,
-                response.message.media,
-            )
-            await event.client.send_read_acknowledge(conv.chat_id)
-            await event.client(DeleteHistoryRequest(peer=chat, max_id=0))
-            await xx.delete()
+sosmed = Sosmed(
+    apiToken=var.SOSMED_API_KEY,
+    secret=var.SOSMED_SECRET,
+)
 
 
 @ayiinCmd(pattern="dez(?: |$)(.*)")
@@ -89,99 +56,48 @@ async def DeezLoader(event):
         await event.delete()
 
 
-@ayiinCmd(pattern="tiktok(?: |$)(.*)")
-async def _(event):
-    xxnx = event.pattern_match.group(1)
-    if xxnx:
-        d_link = xxnx
-    elif event.is_reply:
-        d_link = await event.get_reply_message()
-    else:
-        return await eod(
-            event,
-            "**Berikan Link Tiktok Pesan atau Reply Link Tiktok Untuk di Download**"
-        )
-    xx = await eor(event, "`Video Sedang Diproses...`")
-    chat = "@thisvidbot"
-    async with event.client.conversation(chat) as conv:
-        try:
-            msg_start = await conv.send_message("/start")
-            r = await conv.get_response()
-            msg = await conv.send_message(d_link)
-            details = await conv.get_response()
-            video = await conv.get_response()
-            text = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await event.client(UnblockRequest(chat))
-            msg_start = await conv.send_message("/start")
-            r = await conv.get_response()
-            msg = await conv.send_message(d_link)
-            details = await conv.get_response()
-            video = await conv.get_response()
-            text = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        await event.client.send_file(event.chat_id, video)
-        await event.client.delete_messages(
-            conv.chat_id, [msg_start.id, r.id, msg.id, details.id, video.id, text.id]
-        )
-        await xx.delete()
+@ayiinCmd(pattern="(fb|ig|tt|tw)(?: |$)(.*)")
+async def sosmedDownloader(event):
+    provider = event.pattern_match.group(1)
+    link = event.pattern_match.group(2)
+    if not link:
+        return await eod(event, "**Mohon Berikan Link**", time=10)
+    xx = await eor(event, "`Mengunduh...`")
+    try:
+        if provider == "fb":
+            resFb = await sosmed.facebook(link)
+            file = await resFb.download()
+            await event.client.send_file(event.chat_id, file)
+        elif provider == "ig":
+            resIg = await sosmed.instagram(link)
+            file = await resIg.download()
+            await event.client.send_file(event.chat_id, file)
+        elif provider == "tt":
+            resTt = await sosmed.tiktok(link)
+            file = await resTt.download()
+            await event.client.send_file(event.chat_id, file)
+        elif provider == "tw":
+            resTw = await sosmed.twitter(link)
+            file = await resTw.download()
+            await event.client.send_file(event.chat_id, file)
+    except Exception as e:
+        return await eod(xx, str(e))
+    await xx.delete()
 
-
-@ayiinCmd(pattern="tw(?: |$)(.*)")
-async def _(event):
-    xxnx = event.pattern_match.group(1)
-    if xxnx:
-        d_link = xxnx
-    elif event.is_reply:
-        d_link = await event.get_reply_message()
-    else:
-        return await eod(
-            event,
-            "**Berikan Link Twitter Pesan atau Reply Link Twitter Untuk di Download**"
-        )
-    xx = await eor(event, "**Memproses...**")
-    chat = "@twittervideodownloader_bot"
-    async with event.client.conversation(chat) as conv:
-        try:
-            msg_start = await conv.send_message("/start")
-            r = await conv.get_response()
-            msg = await conv.send_message(d_link)
-            details = await conv.get_response()
-            video = await conv.get_response()
-            text = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        except YouBlockedUserError:
-            await event.client(UnblockRequest(chat))
-            msg_start = await conv.send_message("/start")
-            r = await conv.get_response()
-            msg = await conv.send_message(d_link)
-            details = await conv.get_response()
-            video = await conv.get_response()
-            text = await conv.get_response()
-            await event.client.send_read_acknowledge(conv.chat_id)
-        await event.client.send_file(event.chat_id, video)
-        await event.client.delete_messages(
-            conv.chat_id, [msg_start.id, r.id, msg.id, details.id, video.id, text.id]
-        )
-        await xx.delete()
-
-cmdHelp.update(
-    {
-        "twitter": f"**Plugin : **`twitter`\
-        \n\n  »  **Perintah :** `{cmd}tw` <link>\
-        \n  »  **Kegunaan : **Download Video Twitter\
-    "
-    }
-)
 
 cmdHelp.update(
     {
         "sosmed": f"**Plugin : **`sosmed`\
-        \n\n  »  **Perintah :** `{cmd}sosmed` <link>\
-        \n  »  **Kegunaan : **Download Media Dari Pinterest / Tiktok / Instagram.\
         \n\n  »  **Perintah :** `{cmd}dez` <link>\
         \n  »  **Kegunaan : **Download Lagu Via Deezloader\
+        \n\n  »  **Perintah :** `{cmd}fb` <link>\
+        \n  »  **Kegunaan : **Facebook Downloader Video.\
+        \n\n  »  **Perintah :** `{cmd}ig` <link>\
+        \n  »  **Kegunaan : **Instagram Downloader Video.\
+        \n\n  »  **Perintah :** `{cmd}tt` <link>\
+        \n  »  **Kegunaan : **Tiktok Downloader Video.\
+        \n\n  »  **Perintah :** `{cmd}tw` <link>\
+        \n  »  **Kegunaan : **Twitter Downloader Video.\
     "
     }
 )

@@ -13,16 +13,11 @@
 #            Jangan Hapus Credit Ngentod
 # ========================×========================
 
-import logging
-
-from typing import Optional
-
 from git import Repo
-from pyAyiin import *
 from pyAyiin.database.handler import getHandler
 from pyAyiin.database.sudo import getSudo
-from pyAyiin.utils import eod, eor
 
+from config import var
 
 flood = {}
 OLD_MSG = {}
@@ -30,6 +25,7 @@ repo = Repo()
 branch = repo.active_branch
 cmd = getHandler()
 sudoer = getSudo()
+var = var
 absen = [
     "**𝙃𝙖𝙙𝙞𝙧 𝙙𝙤𝙣𝙜 𝙏𝙤𝙙** 😁",
     "**𝙃𝙖𝙙𝙞𝙧 𝙆𝙖𝙠𝙖 𝙂𝙖𝙣𝙩𝙚𝙣𝙜** 😉",

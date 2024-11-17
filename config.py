@@ -5,7 +5,7 @@ from distutils.util import strtobool as sb
 from base64 import b64decode
 
 
-load_dotenv(".env")
+load_dotenv()
 
 
 
@@ -191,6 +191,10 @@ class Config:
 
     # NSFW Detect DEEP AI
     DEEP_AI = getenv("DEEP_AI", None)
+    
+    # Sosmed Vars
+    SOSMED_API_KEY = getenv("SOSMED_API_KEY", None)
+    SOSMED_SECRET = getenv("SOSMED_SECRET", None)
 
 
 var = Config()

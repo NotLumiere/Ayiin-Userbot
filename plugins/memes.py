@@ -981,7 +981,7 @@ async def slap(replied_user, event):
     )
 
 
-@ayiinCmd(pattern=r"tt(?: |$)(.*)")
+@ayiinCmd(pattern=r"tete(?: |$)(.*)")
 async def _(e):
     await e.edit("`Mencari Gambar tt, Dosa ditanggung sendiri...`")
     await sleep(3)
