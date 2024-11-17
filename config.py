@@ -151,12 +151,6 @@ class Config:
     # Custom Emoji Alive
     ALIVE_EMOJI = getenv("ALIVE_EMOJI", "✧")
 
-    # Custom Emoji Alive
-    INLINE_EMOJI = getenv("INLINE_EMOJI", "✵")
-
-    # Custom icon HELP
-    ICON_HELP = getenv("ICON_HELP", "⍟")
-
     # Time & Date - Country and Time Zone
     COUNTRY = str(getenv("COUNTRY", "ID"))
     TZ_NUMBER = int(getenv("TZ_NUMBER", 1))
@@ -171,7 +165,7 @@ class Config:
     BITLY_TOKEN = getenv("BITLY_TOKEN", None)
 
     # Bot version
-    BOT_VER = getenv("BOT_VER", "4.0.0")
+    BOT_VER = getenv("BOT_VER", "5.0.0")
 
     # Default .alive logo
     ALIVE_LOGO = (getenv("ALIVE_LOGO")
