@@ -4,9 +4,7 @@
 # FROM Man-Userbot <https://github.com/mrismanaziz/Man-Userbot>
 # t.me/SharingUserbot & t.me/Lunatic0de
 
-import io
-import re
-import time
+import io, requests, re, time
 from datetime import datetime
 from os import remove
 
@@ -32,8 +30,18 @@ from . import cmd
 from .ping import get_readable_time
 
 telegraph = Telegraph()
-r = telegraph.create_account(short_name="telegraph")
-auth_url = r["auth_url"]
+
+try:
+    # Membuat akun Telegraph
+    r = telegraph.create_account(short_name="telegraph")
+    auth_url = r.get("auth_url")
+    print(f"Auth URL: {auth_url}")
+except requests.exceptions.ConnectionError as e:
+    print("Gagal terhubung ke server Telegraph. Periksa koneksi internet Anda.")
+    print(f"Detail Error: {e}")
+except Exception as e:
+    print("Terjadi kesalahan tidak terduga.")
+    print(f"Detail Error: {e}")
 
 
 def text_to_url(event):
