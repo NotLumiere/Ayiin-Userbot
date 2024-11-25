@@ -6,7 +6,7 @@
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.photos import DeletePhotosRequest, UploadProfilePhotoRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import InputPhoto
+from telethon.tl.types import InputPhoto, UserFull
 
 from pyAyiin import ayiin, cmdHelp, STORAGE
 from pyAyiin.decorator import ayiinCmd
@@ -41,7 +41,7 @@ async def impostor(event):
             user = await event.client.get_entity(inputArgs)
         except BaseException:
             return await xx.edit("**Nama pengguna/ID tidak valid.**")
-        userObj = await event.client(GetFullUserRequest(user))
+        userObj: UserFull = await event.client(GetFullUserRequest(user))
     elif event.reply_to_msg_id:
         replyMessage = await event.get_reply_message()
         if replyMessage.sender_id in ayiin._devs:
@@ -50,7 +50,7 @@ async def impostor(event):
             )
         if replyMessage.sender_id is None:
             return await xx.edit("**Tidak dapat menyamar sebagai admin anonim 🥺**")
-        userObj = await event.client(GetFullUserRequest(replyMessage.sender_id))
+        userObj: UserFull = await event.client(GetFullUserRequest(replyMessage.sender_id))
     else:
         return await xx.edit(f"**Ketik** `{cmd}help clone` **bila butuh bantuan.**")
 
@@ -63,13 +63,13 @@ async def impostor(event):
     await xx.edit("**Gua Adalah Dajjal dan Dajjal Adalah Gua. Asekk Dajjal 🥴**")
 
 
-async def updateProfile(event, userObj, restore=False):
+async def updateProfile(event, userObj: UserFull, restore=False):
     firstName = (
         "Deleted Account"
-        if userObj.user.first_name is None
-        else userObj.user.first_name
+        if userObj.users[0].first_name is None
+        else userObj.users[0].first_name
     )
-    lastName = "" if userObj.user.last_name is None else userObj.user.last_name
+    lastName = "" if userObj.users[0].last_name is None else userObj.users[0].last_name
     userAbout = userObj.about if userObj.about is not None else ""
     userAbout = "" if len(userAbout) > 70 else userAbout
     if restore:

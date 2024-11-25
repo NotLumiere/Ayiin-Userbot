@@ -31,6 +31,7 @@ from telethon.tl.types import (
     ChannelParticipantsAdmins,
     ChatAdminRights,
     ChatBannedRights,
+    User,
     InputChatPhotoEmpty,
     MessageMediaPhoto,
 )
@@ -578,13 +579,13 @@ async def _iundlt(event):
     deleted_msg = f"**{lim} Pesan yang dihapus di grup ini:**"
     if not flag:
         for msg in adminlog:
-            ruser = (
+            ruser: User = (
                 await event.client(
                     GetFullUserRequest(
                         msg.old.from_id.user_id
                     )
                 )
-            ).user
+            ).users[0]
             _media_type = media_type(msg.old)
             mention = ayiin.mentionuser(
                 ruser.first_name,
@@ -598,9 +599,9 @@ async def _iundlt(event):
     else:
         main_msg = await eor(catevent, deleted_msg)
         for msg in adminlog:
-            ruser = (
+            ruser: User = (
                 await event.client(GetFullUserRequest(msg.old.from_id.user_id))
-            ).user
+            ).users[0]
             _media_type = media_type(msg.old)
             ment = ayiin.mentionuser(
                 ruser.first_name,

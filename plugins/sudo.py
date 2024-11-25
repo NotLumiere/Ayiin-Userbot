@@ -2,9 +2,6 @@
 # FROM Man-Userbot <https://github.com/mrismanaziz/Man-Userbot>
 # t.me/SharingUserbot & t.me/Lunatic0de
 
-import os
-
-import heroku3
 from telethon.tl.functions.users import GetFullUserRequest
 
 from pyAyiin import cmdHelp
@@ -116,7 +113,7 @@ async def get_user(event):
             replied_user = await event.client(
                 GetFullUserRequest(previous_message.sender_id)
             )
-    return replied_user.user.id
+    return replied_user.users[0].id
 
 
 cmdHelp.update(

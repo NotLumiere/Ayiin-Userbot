@@ -217,7 +217,7 @@ async def quotly(event):
     if match:
         if match[0].startswith("@") or match[0].isdigit():
             try:
-                match_ = await event.client(GetFullUserRequest(match[0]))
+                match_ = ((await event.client(GetFullUserRequest(match[0])))).users[0]
                 user = await event.client.get_entity(match_)
             except ValueError:
                 pass
