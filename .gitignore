@@ -1,14 +1,9 @@
-config.env
+assets/cache/*
+downloads
+__pycache__
 error.log
-__pycache__/*
-AyiinXd.db
 *.session
 *.session-journal
-TG_BOT_TOKEN.session
-TG_BOT_TOKEN.session-journal
-AyiinXd/__pycache__/*
-AyiinXd/modules/__pycache__/*
-AyiinXd/modules/sql_helper/__pycache__/*
 .git
 .github
 .config
@@ -17,4 +12,6 @@ AyiinXd/modules/sql_helper/__pycache__/*
 bin/*
 venv
 *.pyc 
+*.log 
+*.db 
 .env
